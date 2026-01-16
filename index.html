@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halawa Restaurant & Café - Open Buffet</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-theme="light">
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1 class="logo-text">Halawa</h1>
+                    <span class="logo-subtitle" data-lang="restaurant-cafe">Restaurant & Café</span>
+                </div>
+                <div class="header-controls">
+                    <div class="language-switcher">
+                        <button class="lang-btn active" data-lang="en">EN</button>
+                        <button class="lang-btn" data-lang="ar">AR</button>
+                    </div>
+                    <div class="theme-switcher">
+                        <button class="theme-btn active" data-theme="light" title="Light">☀️</button>
+                        <button class="theme-btn" data-theme="dark" title="Dark">🌙</button>
+                        <button class="theme-btn" data-theme="earthy" title="Earthy">🌿</button>
+                        <button class="theme-btn" data-theme="warm" title="Warm">🔥</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-background">
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title" data-lang="hero-title">Open Buffet at Halawa</h1>
+                <p class="hero-description" data-lang="hero-description">
+                    Join us for an exquisite dining experience with Arabic and international cuisine
+                </p>
+                <div class="hero-info">
+                    <div class="info-item">
+                        <span class="info-icon">📅</span>
+                        <span data-lang="days">Thursday, Friday, Saturday</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🕐</span>
+                        <span data-lang="times">Lunch: 3:00 PM - 6:00 PM | Dinner: 8:00 PM - 11:00 PM</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">💰</span>
+                        <span data-lang="price">20 JOD per person</span>
+                    </div>
+                </div>
+                <button class="cta-button" id="bookNowBtn" data-lang="book-now">Book Now</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Restaurant & Event Info Section -->
+    <section class="info-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 data-lang="about-title">About Halawa Restaurant</h2>
+                <p data-lang="about-description">
+                    A family-friendly restaurant and café serving Arabic and international food, desserts, and beverages
+                </p>
+            </div>
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="card-image">
+                        <img src="assets/images/cousine.jpg" alt="Exquisite Arabic and International Cuisine" loading="lazy">
+                    </div>
+                    <div class="card-content">
+                        <h3 data-lang="cuisine-title">Exquisite Cuisine</h3>
+                        <p data-lang="cuisine-description">
+                            Authentic Arabic dishes alongside international favorites, prepared with the finest ingredients
+                        </p>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="card-image">
+                        <img src="assets/images/Kids Buffet.jpg" alt="Family Friendly Atmosphere" loading="lazy">
+                    </div>
+                    <div class="card-content">
+                        <h3 data-lang="family-title">Family Friendly</h3>
+                        <p data-lang="family-description">
+                            Warm, welcoming atmosphere perfect for families and gatherings of all sizes
+                        </p>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="card-image">
+                        <img src="assets/images/dessert.jpg" alt="Delicious Desserts" loading="lazy">
+                    </div>
+                    <div class="card-content">
+                        <h3 data-lang="desserts-title">Delicious Desserts</h3>
+                        <p data-lang="desserts-description">
+                            Wide selection of traditional Arabic sweets and international desserts
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2 data-lang="cta-title">Reserve Your Table Today</h2>
+                <p data-lang="cta-description">
+                    Limited seats available! Book your spot for an unforgettable dining experience
+                </p>
+                <button class="cta-button secondary" id="ctaBookBtn" data-lang="book-now">Book Now</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section class="booking-section" id="bookingSection">
+        <div class="container">
+            <div class="section-header">
+                <h2 data-lang="booking-title">Book Your Buffet Experience</h2>
+                <p data-lang="booking-description">
+                    Select your preferred date and complete your reservation
+                </p>
+            </div>
+            
+            <div class="booking-container">
+                <div class="calendar-section">
+                    <h3 data-lang="select-date">Select Date</h3>
+                    <div class="calendar" id="calendar">
+                        <div class="calendar-header">
+                            <button class="calendar-nav" id="prevMonth">‹</button>
+                            <h4 id="currentMonth"></h4>
+                            <button class="calendar-nav" id="nextMonth">›</button>
+                        </div>
+                        <div class="calendar-grid">
+                            <div class="calendar-weekdays">
+                                <div>Sun</div>
+                                <div>Mon</div>
+                                <div>Tue</div>
+                                <div>Wed</div>
+                                <div>Thu</div>
+                                <div>Fri</div>
+                                <div>Sat</div>
+                            </div>
+                            <div class="calendar-days" id="calendarDays"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="booking-form-section">
+                    <h3 data-lang="booking-details">Booking Details</h3>
+                    <form class="booking-form" id="bookingForm">
+                        <div class="form-group">
+                            <label for="selectedDate" data-lang="selected-date">Selected Date</label>
+                            <input type="text" id="selectedDate" readonly>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="fullName" data-lang="full-name">Full Name</label>
+                            <input type="text" id="fullName" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phoneNumber" data-lang="phone-number">Phone Number</label>
+                            <input type="tel" id="phoneNumber" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="guests" data-lang="number-guests">Number of Guests</label>
+                            <input type="number" id="guests" min="1" max="20" required>
+                        </div>
+                        
+                        <div class="availability-info">
+                            <h4 data-lang="seat-availability">Seat Availability</h4>
+                            <div class="availability-stats">
+                                <div class="stat">
+                                    <span class="stat-label" data-lang="total-seats">Total Seats:</span>
+                                    <span class="stat-value">200</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label" data-lang="booked-seats">Booked:</span>
+                                    <span class="stat-value" id="bookedSeats">0</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label" data-lang="available-seats">Available:</span>
+                                    <span class="stat-value" id="availableSeats">200</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="price-info">
+                            <div class="price-row">
+                                <span data-lang="price-per-person">Price per person:</span>
+                                <span>20 JOD</span>
+                            </div>
+                            <div class="price-row total">
+                                <span data-lang="total-price">Total Price:</span>
+                                <span id="totalPrice">0 JOD</span>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn" data-lang="confirm-booking">Confirm Booking</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 data-lang="booking-confirmed">Booking Confirmed!</h3>
+                <button class="modal-close" id="closeModal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="confirmation-details">
+                    <p><strong data-lang="booking-reference">Booking Reference:</strong> <span id="bookingRef"></span></p>
+                    <p><strong data-lang="date">Date:</strong> <span id="confirmDate"></span></p>
+                    <p><strong data-lang="name">Name:</strong> <span id="confirmName"></span></p>
+                    <p><strong data-lang="guests">Guests:</strong> <span id="confirmGuests"></span></p>
+                    <p><strong data-lang="total-price">Total Price:</strong> <span id="confirmPrice"></span></p>
+                </div>
+                <div class="confirmation-message">
+                    <p data-lang="confirmation-message">
+                        Thank you for your reservation! We look forward to serving you at Halawa Restaurant & Café.
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" id="confirmOk" data-lang="ok">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Halawa</h3>
+                    <p data-lang="footer-description">
+                        Family-friendly restaurant serving Arabic and international cuisine
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-lang="contact-info">Contact Info</h4>
+                    <p>📍 Amman, Jordan</p>
+                    <p>📞 +962 6 1234 5678</p>
+                    <p>✉️ info@halawa-restaurant.jo</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-lang="opening-hours">Opening Hours</h4>
+                    <p data-lang="buffet-days">Thu-Sat: 3:00 PM - 11:00 PM</p>
+                    <p data-lang="regular-days">Sun-Wed: 12:00 PM - 10:00 PM</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Halawa Restaurant & Café. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/content.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
