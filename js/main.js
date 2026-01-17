@@ -121,93 +121,193 @@ class HalawaRestaurant {
         }
         
         // Language switcher
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const lang = btn.getAttribute('data-lang');
-                this.updateLanguage(lang);
-                this.setActiveLanguageButton();
+        const langButtons = document.querySelectorAll('.lang-btn');
+        if (langButtons.length > 0) {
+            langButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const lang = btn.getAttribute('data-lang');
+                    this.updateLanguage(lang);
+                    this.setActiveLanguageButton();
+                });
             });
-        });
+        }
 
         // Theme switcher
-        document.querySelectorAll('.theme-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+        const themeButtons = document.querySelectorAll('.theme-btn');
+        if (themeButtons.length > 0) {
+            themeButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const theme = btn.getAttribute('data-theme');
+                    const oldActiveBtn = document.querySelector('.theme-btn.active');
+                    const newActiveBtn = btn;
+                    
+                    // Apply theme immediately
+                    this.applyTheme(theme);
+                    
+                    // Smooth transition effect
+                    if (oldActiveBtn && oldActiveBtn !== newActiveBtn) {
+                        // Remove active class from old button
+                        oldActiveBtn.classList.remove('active');
+                        
+                        // Add active class to new button
+                        newActiveBtn.classList.add('active');
+                        
+                        // Update position based on which button is now active
+                        setTimeout(() => {
+                            this.updateButtonPositions(newActiveBtn);
+                        }, 50);
+                    } else {
+                        newActiveBtn.classList.add('active');
+                    }
+                });
+            });
+        }
+
+        // Calendar functionality - only if calendar elements exist
+        const calendarToggle = document.getElementById('calendarToggle');
+        const calendarSection = document.getElementById('calendarSection');
+        const selectedDateInput = document.getElementById('selectedDate');
+        
+        if (calendarToggle && calendarSection && selectedDateInput) {
+            // Calendar toggle functionality
+            calendarToggle.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                
-                const theme = btn.getAttribute('data-theme');
-                const oldActiveBtn = document.querySelector('.theme-btn.active');
-                const newActiveBtn = btn;
-                
-                // Apply theme immediately
-                this.applyTheme(theme);
-                
-                // Smooth transition effect
-                if (oldActiveBtn && oldActiveBtn !== newActiveBtn) {
-                    // Remove active class from old button
-                    oldActiveBtn.classList.remove('active');
+                calendarSection.classList.toggle('show');
+            });
+            
+            // Handle manual date input
+            selectedDateInput.addEventListener('change', (e) => {
+                const selectedValue = e.target.value;
+                if (selectedValue) {
+                    const date = new Date(selectedValue);
+                    // Check if date is valid
+                    const today = new Date();
+                    const buffetStartDate = new Date(2026, 0, 20); // January 20, 2026
+                    const buffetEndDate = new Date(2026, 1, 14); // February 14, 2026
                     
-                    // Add active class to new button
-                    newActiveBtn.classList.add('active');
-                    
-                    // Update position based on which button is now active
-                    setTimeout(() => {
-                        this.updateButtonPositions(newActiveBtn);
-                    }, 50);
-                } else {
-                    newActiveBtn.classList.add('active');
+                    if (date >= today && date >= buffetStartDate && date <= buffetEndDate) {
+                        this.selectDate(date);
+                    } else {
+                        // Invalid date, clear it
+                        e.target.value = '';
+                        alert(this.currentLang === 'ar' ? 'التاريخ المحدد غير صالح' : 'Selected date is not valid');
+                    }
                 }
             });
-        });
+            
+            // Also open calendar when focusing on date input
+            selectedDateInput.addEventListener('focus', (e) => {
+                e.preventDefault();
+                calendarSection.classList.add('show');
+            });
+            
+            // Close calendar when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!calendarSection.contains(e.target) && 
+                    !e.target.closest('.date-input-wrapper')) {
+                    calendarSection.classList.remove('show');
+                }
+            });
+            
+            // Close calendar when clicking on a date
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('calendar-day') && 
+                    !e.target.classList.contains('disabled')) {
+                    setTimeout(() => {
+                        calendarSection.classList.remove('show');
+                    }, 100);
+                }
+            });
+        }
 
-        // Book Now buttons
-        document.getElementById('bookNowBtn').addEventListener('click', () => {
-            this.scrollToBooking();
-        });
+        // Book Now buttons - only if elements exist
+        const bookNowBtn = document.getElementById('bookNowBtn');
+        if (bookNowBtn) {
+            bookNowBtn.addEventListener('click', () => {
+                this.scrollToBooking();
+            });
+        }
 
-        document.getElementById('ctaBookBtn').addEventListener('click', () => {
-            this.scrollToBooking();
-        });
+        const ctaBookBtn = document.getElementById('ctaBookBtn');
+        if (ctaBookBtn) {
+            ctaBookBtn.addEventListener('click', () => {
+                this.scrollToBooking();
+            });
+        }
 
-        // Calendar navigation
-        document.getElementById('prevMonth').addEventListener('click', () => {
-            this.changeMonth(-1);
-        });
+        // Calendar navigation - only if elements exist
+        const prevMonthBtn = document.getElementById('prevMonth');
+        if (prevMonthBtn) {
+            prevMonthBtn.addEventListener('click', () => {
+                this.changeMonth(-1);
+            });
+        }
 
-        document.getElementById('nextMonth').addEventListener('click', () => {
-            this.changeMonth(1);
-        });
+        const nextMonthBtn = document.getElementById('nextMonth');
+        if (nextMonthBtn) {
+            nextMonthBtn.addEventListener('click', () => {
+                this.changeMonth(1);
+            });
+        }
 
-        // Booking form
-        document.getElementById('bookingForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.handleBookingSubmit();
-        });
+        // Booking form - only if element exists
+        const bookingForm = document.getElementById('bookingForm');
+        if (bookingForm) {
+            bookingForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleBookingSubmit();
+            });
+        }
 
-        // Guests input - update price
-        document.getElementById('guests').addEventListener('input', () => {
-            this.updateTotalPrice();
-        });
+        // Guests input - only if element exists
+        const guestsInput = document.getElementById('guests');
+        if (guestsInput) {
+            guestsInput.addEventListener('input', () => {
+                this.updateTotalPrice();
+            });
+        }
 
-        // Modal close
-        document.getElementById('closeModal').addEventListener('click', () => {
-            this.closeModal();
-        });
-
-        document.getElementById('confirmOk').addEventListener('click', () => {
-            this.closeModal();
-        });
-
-        // Click outside modal to close
-        document.getElementById('confirmationModal').addEventListener('click', (e) => {
-            if (e.target.id === 'confirmationModal') {
+        // Modal close buttons - only if elements exist
+        const closeModalBtn = document.getElementById('closeModal');
+        if (closeModalBtn) {
+            closeModalBtn.addEventListener('click', () => {
                 this.closeModal();
-            }
-        });
+            });
+        }
+
+        const confirmOkBtn = document.getElementById('confirmOk');
+        if (confirmOkBtn) {
+            confirmOkBtn.addEventListener('click', () => {
+                this.closeModal();
+            });
+        }
+
+        // Click outside modal to close - only if element exists
+        const confirmationModal = document.getElementById('confirmationModal');
+        if (confirmationModal) {
+            confirmationModal.addEventListener('click', (e) => {
+                if (e.target.id === 'confirmationModal') {
+                    this.closeModal();
+                }
+            });
+        }
     }
 
-    // Calendar Functions
+    // Calendar Functions - only if calendar elements exist
     setupCalendar() {
+        const calendarDays = document.getElementById('calendarDays');
+        const currentMonth = document.getElementById('currentMonth');
+        const selectedDateInput = document.getElementById('selectedDate');
+        
+        if (!calendarDays || !currentMonth || !selectedDateInput) {
+            console.warn('Calendar elements not found, skipping calendar setup');
+            return;
+        }
+        
         // Load bookings first
         this.bookings = this.loadBookings();
         
@@ -222,7 +322,12 @@ class HalawaRestaurant {
             
             if (date >= today && date >= buffetStartDate && date <= buffetEndDate) {
                 this.selectedDate = date;
-                document.getElementById('selectedDate').value = this.formatDate(date);
+                // Format date for date input
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const formattedDate = `${year}-${month}-${day}`;
+                selectedDateInput.value = formattedDate;
             } else {
                 // Clear invalid date
                 localStorage.removeItem('halawaSelectedDate');
@@ -261,6 +366,14 @@ class HalawaRestaurant {
     }
 
     renderCalendar() {
+        const calendarDays = document.getElementById('calendarDays');
+        const currentMonth = document.getElementById('currentMonth');
+        
+        if (!calendarDays || !currentMonth) {
+            console.warn('Calendar elements not found, skipping render');
+            return;
+        }
+        
         const year = this.currentMonth.getFullYear();
         const month = this.currentMonth.getMonth();
         
@@ -269,10 +382,9 @@ class HalawaRestaurant {
             ? ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر']
             : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         
-        document.getElementById('currentMonth').textContent = `${monthNames[month]} ${year}`;
+        currentMonth.textContent = `${monthNames[month]} ${year}`;
         
         // Clear existing days
-        const calendarDays = document.getElementById('calendarDays');
         calendarDays.innerHTML = '';
         
         // Get first day of month and number of days
@@ -326,15 +438,25 @@ class HalawaRestaurant {
     selectDate(date) {
         this.selectedDate = date;
         
-        // Save selected date to localStorage
+        // Format date for date input
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
+        
+        const selectedDateInput = document.getElementById('selectedDate');
+        if (selectedDateInput) {
+            selectedDateInput.value = formattedDate;
+        }
+        
         localStorage.setItem('halawaSelectedDate', date.toISOString());
-        
-        // Update form
-        document.getElementById('selectedDate').value = this.formatDate(date);
-        
-        // Update UI
-        this.renderCalendar();
         this.updateSeatAvailability();
+        
+        // Close calendar popup after selection
+        const calendarSection = document.getElementById('calendarSection');
+        if (calendarSection) {
+            calendarSection.classList.remove('show');
+        }
     }
 
     formatDate(date) {
@@ -395,9 +517,17 @@ class HalawaRestaurant {
     }
 
     updateSeatAvailability() {
+        const bookedSeatsElement = document.getElementById('bookedSeats');
+        const availableSeatsElement = document.getElementById('availableSeats');
+        
+        if (!bookedSeatsElement || !availableSeatsElement) {
+            console.warn('Seat availability elements not found');
+            return;
+        }
+        
         if (!this.selectedDate) {
-            document.getElementById('bookedSeats').textContent = '0';
-            document.getElementById('availableSeats').textContent = '200';
+            bookedSeatsElement.textContent = '0';
+            availableSeatsElement.textContent = '200';
             return;
         }
         
@@ -407,32 +537,46 @@ class HalawaRestaurant {
         const available = Math.max(0, 200 - totalBooked);
         
         // Update display with animation
-        const bookedElement = document.getElementById('bookedSeats');
-        const availableElement = document.getElementById('availableSeats');
-        
-        bookedElement.textContent = totalBooked;
-        availableElement.textContent = available;
+        bookedSeatsElement.textContent = totalBooked;
+        availableSeatsElement.textContent = available;
         
         // Add visual feedback for availability
         if (available <= 20) {
-            availableElement.style.color = '#e74c3c'; // Red for low availability
+            availableSeatsElement.style.color = '#e74c3c'; // Red for low availability
         } else if (available <= 50) {
-            availableElement.style.color = '#f39c12'; // Orange for medium availability
+            availableSeatsElement.style.color = '#f39c12'; // Orange for medium availability
         } else {
-            availableElement.style.color = '#27ae60'; // Green for good availability
+            availableSeatsElement.style.color = '#27ae60'; // Green for good availability
         }
     }
 
     updateTotalPrice() {
-        const guests = parseInt(document.getElementById('guests').value) || 0;
+        const guestsInput = document.getElementById('guests');
+        const totalPriceElement = document.getElementById('totalPrice');
+        
+        if (!guestsInput || !totalPriceElement) {
+            console.warn('Price elements not found');
+            return;
+        }
+        
+        const guests = parseInt(guestsInput.value) || 0;
         const totalPrice = guests * restaurantData.event.price;
-        document.getElementById('totalPrice').textContent = `${totalPrice} ${restaurantData.event.currency}`;
+        totalPriceElement.textContent = `${totalPrice} ${restaurantData.event.currency}`;
     }
 
     handleBookingSubmit() {
-        const fullName = document.getElementById('fullName').value.trim();
-        const phoneNumber = document.getElementById('phoneNumber').value.trim();
-        const guests = parseInt(document.getElementById('guests').value);
+        const fullNameInput = document.getElementById('fullName');
+        const phoneNumberInput = document.getElementById('phoneNumber');
+        const guestsInput = document.getElementById('guests');
+        
+        if (!fullNameInput || !phoneNumberInput || !guestsInput) {
+            console.warn('Form elements not found');
+            return;
+        }
+        
+        const fullName = fullNameInput.value.trim();
+        const phoneNumber = phoneNumberInput.value.trim();
+        const guests = parseInt(guestsInput.value);
         
         // Validation
         if (!this.selectedDate) {
@@ -490,8 +634,14 @@ class HalawaRestaurant {
             this.renderCalendar();
             
             // Reset form
-            document.getElementById('bookingForm').reset();
-            document.getElementById('selectedDate').value = '';
+            const bookingForm = document.getElementById('bookingForm');
+            if (bookingForm) {
+                bookingForm.reset();
+            }
+            const selectedDateInput = document.getElementById('selectedDate');
+            if (selectedDateInput) {
+                selectedDateInput.value = '';
+            }
             this.selectedDate = null;
             
             // Clear saved date from localStorage
@@ -512,23 +662,42 @@ class HalawaRestaurant {
     }
 
     showConfirmation(booking) {
-        document.getElementById('bookingRef').textContent = booking.id;
-        document.getElementById('confirmDate').textContent = this.formatDate(new Date(booking.date));
-        document.getElementById('confirmName').textContent = booking.fullName;
-        document.getElementById('confirmGuests').textContent = booking.guests;
-        document.getElementById('confirmPrice').textContent = `${booking.totalPrice} ${restaurantData.event.currency}`;
+        const bookingRefElement = document.getElementById('bookingRef');
+        const confirmDateElement = document.getElementById('confirmDate');
+        const confirmNameElement = document.getElementById('confirmName');
+        const confirmGuestsElement = document.getElementById('confirmGuests');
+        const confirmPriceElement = document.getElementById('confirmPrice');
+        const confirmationModal = document.getElementById('confirmationModal');
         
-        document.getElementById('confirmationModal').classList.add('active');
+        if (!bookingRefElement || !confirmDateElement || !confirmNameElement || 
+            !confirmGuestsElement || !confirmPriceElement || !confirmationModal) {
+            console.warn('Modal elements not found');
+            return;
+        }
+        
+        bookingRefElement.textContent = booking.id;
+        confirmDateElement.textContent = this.formatDate(new Date(booking.date));
+        confirmNameElement.textContent = booking.fullName;
+        confirmGuestsElement.textContent = booking.guests;
+        confirmPriceElement.textContent = `${booking.totalPrice} ${restaurantData.event.currency}`;
+        
+        confirmationModal.classList.add('active');
     }
 
     closeModal() {
-        document.getElementById('confirmationModal').classList.remove('active');
+        const confirmationModal = document.getElementById('confirmationModal');
+        if (confirmationModal) {
+            confirmationModal.classList.remove('active');
+        }
     }
 
     scrollToBooking() {
-        document.getElementById('bookingSection').scrollIntoView({ 
-            behavior: 'smooth' 
-        });
+        const bookingSection = document.getElementById('bookingSection');
+        if (bookingSection) {
+            bookingSection.scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
     }
 }
 

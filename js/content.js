@@ -96,7 +96,7 @@ const translations = {
         // Hero Section
         "hero-title": "Open Buffet at Halawa",
         "hero-description": "Join us for an exquisite dining experience with Arabic and international cuisine",
-        "days": "Thursday, Friday, Saturday",
+        "days": "Every Thursday, Friday, Saturday starting from 22 January for one month",
         "times": "Lunch: 3:00 PM - 6:00 PM | Dinner: 8:00 PM - 11:00 PM",
         "price": "20 JOD per person",
         "book-now": "Book Now",
@@ -156,7 +156,7 @@ const translations = {
         // Hero Section
         "hero-title": "البوفيه المفتوح في حلاوة",
         "hero-description": "انضم إلينا لتجربة طعام راقية مع المأكولات العربية والعالمية",
-        "days": "الخميس، الجمعة، السبت",
+        "days": "كل خميس، وجمعة، وسبت إبتداءا من 22 يناير ولمدة شهر",
         "times": "الغداء: 3:00 مساءً - 6:00 مساءً | العشاء: 8:00 مساءً - 11:00 مساءً",
         "price": "20 دينار أردني للشخص",
         "book-now": "احجز الآن",
