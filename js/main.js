@@ -77,14 +77,57 @@ class HalawaRestaurant {
 
     // Theme Management
     setupTheme() {
+        // Define theme cycle order and icons for toggle
+        this.themeCycle = ['light', 'dark', 'earthy', 'warm'];
+        this.themeIcons = {
+            'light': '☀️',
+            'dark': '🌙',
+            'earthy': '🌿',
+            'warm': '🔥'
+        };
+        
         this.applyTheme(this.currentTheme);
-        this.setActiveThemeButton();
+        // Set initial icon to show NEXT theme (Dark when current is Light)
+        this.updateToggleIcon(this.currentTheme);
     }
 
     applyTheme(theme) {
         this.currentTheme = theme;
         localStorage.setItem('theme', theme);
         document.body.setAttribute('data-theme', theme);
+    }
+
+    // Cycle through themes for toggle button
+    cycleTheme() {
+        console.log('cycleTheme called, current theme:', this.currentTheme);
+        console.log('themeCycle:', this.themeCycle);
+        
+        const currentIndex = this.themeCycle.indexOf(this.currentTheme);
+        console.log('current index:', currentIndex);
+        
+        const nextIndex = (currentIndex + 1) % this.themeCycle.length;
+        console.log('next index:', nextIndex);
+        
+        const nextTheme = this.themeCycle[nextIndex];
+        console.log('next theme:', nextTheme);
+        
+        this.applyTheme(nextTheme);
+        this.updateToggleIcon(nextTheme);
+    }
+
+    // Update toggle button icon to show NEXT theme, not current
+    updateToggleIcon(theme) {
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        if (!themeToggleBtn) return;
+        
+        const iconElement = themeToggleBtn.querySelector('.theme-icon');
+        
+        // Show NEXT theme icon, not current
+        const currentIndex = this.themeCycle.indexOf(theme);
+        const nextIndex = (currentIndex + 1) % this.themeCycle.length;
+        const nextTheme = this.themeCycle[nextIndex];
+        
+        iconElement.textContent = this.themeIcons[nextTheme];
     }
 
     setActiveThemeButton() {
@@ -132,37 +175,18 @@ class HalawaRestaurant {
             });
         }
 
-        // Theme switcher
-        const themeButtons = document.querySelectorAll('.theme-btn');
-        if (themeButtons.length > 0) {
-            themeButtons.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    const theme = btn.getAttribute('data-theme');
-                    const oldActiveBtn = document.querySelector('.theme-btn.active');
-                    const newActiveBtn = btn;
-                    
-                    // Apply theme immediately
-                    this.applyTheme(theme);
-                    
-                    // Smooth transition effect
-                    if (oldActiveBtn && oldActiveBtn !== newActiveBtn) {
-                        // Remove active class from old button
-                        oldActiveBtn.classList.remove('active');
-                        
-                        // Add active class to new button
-                        newActiveBtn.classList.add('active');
-                        
-                        // Update position based on which button is now active
-                        setTimeout(() => {
-                            this.updateButtonPositions(newActiveBtn);
-                        }, 50);
-                    } else {
-                        newActiveBtn.classList.add('active');
-                    }
-                });
+        // Theme switcher - Single toggle button
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        if (themeToggleBtn) {
+            // Set initial toggle button icon based on current theme
+            this.updateToggleIcon(this.currentTheme);
+            
+            // Cycle through themes on button click
+            themeToggleBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Theme toggle clicked, current theme:', this.currentTheme);
+                this.cycleTheme();
             });
         }
 
@@ -568,6 +592,7 @@ class HalawaRestaurant {
         const fullNameInput = document.getElementById('fullName');
         const phoneNumberInput = document.getElementById('phoneNumber');
         const guestsInput = document.getElementById('guests');
+        const mealTypeInput = document.querySelector('input[name="mealType"]:checked');
         
         if (!fullNameInput || !phoneNumberInput || !guestsInput) {
             console.warn('Form elements not found');
@@ -586,6 +611,11 @@ class HalawaRestaurant {
         
         if (!fullName || !phoneNumber || !guests) {
             alert(this.currentLang === 'ar' ? 'الرجاء ملء جميع الحقول' : 'Please fill all fields');
+            return;
+        }
+        
+        if (!mealTypeInput) {
+            alert(this.currentLang === 'ar' ? 'الرجاء اختيار نوع الوجبة' : 'Please select meal type');
             return;
         }
         
@@ -611,6 +641,8 @@ class HalawaRestaurant {
             fullName,
             phoneNumber,
             guests,
+            mealType: mealTypeInput.value,
+            mealTime: this.getMealTime(mealTypeInput.value),
             totalPrice: guests * restaurantData.event.price,
             timestamp: new Date().toISOString(),
             status: 'confirmed'
@@ -657,6 +689,14 @@ class HalawaRestaurant {
         }
     }
 
+    getMealTime(mealType) {
+        const times = {
+            'lunch': this.currentLang === 'ar' ? '12:00 م - 3:00 م' : '12:00 PM - 3:00 PM',
+            'dinner': this.currentLang === 'ar' ? '6:00 م - 10:00 م' : '6:00 PM - 10:00 PM'
+        };
+        return times[mealType];
+    }
+
     generateBookingId() {
         return 'HAL' + Date.now().toString(36).toUpperCase();
     }
@@ -664,24 +704,34 @@ class HalawaRestaurant {
     showConfirmation(booking) {
         const bookingRefElement = document.getElementById('bookingRef');
         const confirmDateElement = document.getElementById('confirmDate');
+        const confirmMealTypeElement = document.getElementById('confirmMealType');
         const confirmNameElement = document.getElementById('confirmName');
         const confirmGuestsElement = document.getElementById('confirmGuests');
         const confirmPriceElement = document.getElementById('confirmPrice');
         const confirmationModal = document.getElementById('confirmationModal');
         
-        if (!bookingRefElement || !confirmDateElement || !confirmNameElement || 
-            !confirmGuestsElement || !confirmPriceElement || !confirmationModal) {
+        if (!bookingRefElement || !confirmDateElement || !confirmMealTypeElement || 
+            !confirmNameElement || !confirmGuestsElement || !confirmPriceElement || !confirmationModal) {
             console.warn('Modal elements not found');
             return;
         }
         
         bookingRefElement.textContent = booking.id;
         confirmDateElement.textContent = this.formatDate(new Date(booking.date));
+        confirmMealTypeElement.textContent = `${booking.mealTime} (${this.getMealName(booking.mealType)})`;
         confirmNameElement.textContent = booking.fullName;
         confirmGuestsElement.textContent = booking.guests;
         confirmPriceElement.textContent = `${booking.totalPrice} ${restaurantData.event.currency}`;
         
         confirmationModal.classList.add('active');
+    }
+
+    getMealName(mealType) {
+        const names = {
+            'lunch': this.currentLang === 'ar' ? 'غداء' : 'Lunch',
+            'dinner': this.currentLang === 'ar' ? 'عشاء' : 'Dinner'
+        };
+        return names[mealType];
     }
 
     closeModal() {

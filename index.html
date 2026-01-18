@@ -21,10 +21,10 @@
                         <button class="lang-btn" data-lang="ar">AR</button>
                     </div>
                     <div class="theme-switcher">
-                        <button class="theme-btn active" data-theme="light" title="Light">☀️</button>
-                        <button class="theme-btn" data-theme="dark" title="Dark">🌙</button>
-                        <button class="theme-btn" data-theme="earthy" title="Earthy">🌿</button>
-                        <button class="theme-btn" data-theme="warm" title="Warm">🔥</button>
+                        <!-- Single toggle button -->
+                        <button class="theme-toggle-btn" id="themeToggleBtn">
+                            <span class="theme-icon">🌙</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -178,6 +178,26 @@
                             <input type="number" id="guests" min="1" max="20" required>
                         </div>
                         
+                        <div class="form-group">
+                            <label data-lang="meal-type">Meal Type</label>
+                            <div class="meal-options">
+                                <label class="meal-option">
+                                    <input type="radio" name="mealType" value="lunch" required>
+                                    <span class="meal-info">
+                                        <span class="meal-name" data-lang="lunch">Lunch</span>
+                                        <span class="meal-time">12:00 PM - 3:00 PM</span>
+                                    </span>
+                                </label>
+                                <label class="meal-option">
+                                    <input type="radio" name="mealType" value="dinner" required>
+                                    <span class="meal-info">
+                                        <span class="meal-name" data-lang="dinner">Dinner</span>
+                                        <span class="meal-time">6:00 PM - 10:00 PM</span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                        
                         <div class="availability-info">
                             <h4 data-lang="seat-availability">Seat Availability</h4>
                             <div class="availability-stats">
@@ -225,6 +245,7 @@
                 <div class="confirmation-details">
                     <p><strong data-lang="booking-reference">Booking Reference:</strong> <span id="bookingRef"></span></p>
                     <p><strong data-lang="date">Date:</strong> <span id="confirmDate"></span></p>
+                    <p><strong data-lang="meal-type">Meal Type:</strong> <span id="confirmMealType"></span></p>
                     <p><strong data-lang="name">Name:</strong> <span id="confirmName"></span></p>
                     <p><strong data-lang="guests">Guests:</strong> <span id="confirmGuests"></span></p>
                     <p><strong data-lang="total-price">Total Price:</strong> <span id="confirmPrice"></span></p>
